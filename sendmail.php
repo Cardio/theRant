@@ -9,7 +9,7 @@
 if ( isset( $_POST['name'] ) && empty( $_POST['spam_check'] ) ) {
 
 	// Enter your email
-	$mail = 'name@yoursite.com';
+	$mail = 'ajenkins1601@gmail.com';
 
 	// Include our email validator for later use
 	require 'inc/email-validator.php';
