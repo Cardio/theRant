@@ -1,6 +1,7 @@
 <?php
-
-include ('db_connect.php');
+$m = new Mongo();
+$mongo = $m->rant;
+$collection = $mongo->posts;
 
 $name = $_POST['name'];
 $month = $_POST['month'];
@@ -8,14 +9,9 @@ $day = $_POST['day'];
 $yr = $_POST['year'];
 $date = $yr . '-' . $month . '-' . $day;
 $title=$_POST['title'];
-$post = mysqli_real_escape_string($db, trim($_POST['post']));
+$post = $_POST['post'];
 
-$query="INSERT INTO posts (title, post, author, date_posted) VALUES ('$title', '$post', '$name', '$date')";
-$result = mysqli_query($db, $query) or die("Error Querying Database");
-
-$query="SELECT * FROM posts WHERE post='$post' AND author='$name'";
-$result = mysqli_query($db, $query) or die("Error Querying Database");
-$row = mysqli_fetch_array($result);
+$collection->insert(array("title" => $title, "name" => $name, "date" => $date, "post" => $post ));
 
 /*
 //started here
@@ -88,8 +84,7 @@ if(isset($_POST['Submit'])&&!$errors) {
 	exit;
 }  
 ?>
-*/
-mysqli_close($db);   
+*/   
 header('Location: blog.php');
 exit;   
 ?>

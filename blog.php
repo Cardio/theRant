@@ -28,52 +28,44 @@
     <article class="post">		
 					<!-- CONTENT -->
 <?php
-include ('db_connect.php');
-$query = "SELECT * FROM posts";  
-$result = mysqli_query($db, $query)or die("Error Querying Database1");
-while($row = mysqli_fetch_array($result)){
+$m = new Mongo();
+$mongo = $m->rant;
+$collection = $mongo->posts;
+$cursor = $collection->find();
 
-echo "<h3><a href=\"#\">" . $row['title'] . "</a></h3><img src=\"images/thumbnail.jpg\" alt=\"\" class=\"thumbnail alignleft\" />";
-
-/*
-if  (isset($row['pic'])){ ?>
-		<img src='<?php echo $row['pic'] ?>' alt=\"\" class=\"thumbnail alignleft\" />";
-	<?php
-	}
-	else{ ?>
-		<img src=\"images/thumbnail.jpg\" alt=\"\" class=\"thumbnail alignleft\" />";
-	<?php }
-*/
-	
-echo "<table>";
-echo "<tr><td width=\"35%\">Name:"  . $row['author']  . "</td><td></td><tr>";
-echo "<tr><td width=\"65%\">Date: " . $row['date_posted'] . "</td><td></td></tr>";
-echo "<tr><td>Post:</td></tr><tr><td>";
-echo wordwrap($row['post'] . "</td></tr>",50,"<br />\n",TRUE);
-echo "</table>";
- 
-$postid=$row['id'];
- 
-$query = "SELECT * FROM postTocomment WHERE postId='$postid'";  
-$result1 = mysqli_query($db, $query)or die("Error Querying Database1");
-echo"<br/><hr/>";
-
-while($row2 = mysqli_fetch_array($result1)){
-$query1 = "SELECT * FROM comment WHERE id='$row2[commentId]'";  
-$result2 = mysqli_query($db, $query1)or die("Error Querying Database2");
-while($row1 = mysqli_fetch_array($result2)){
-
-	
-	echo"<table>";
-    echo "<tr><td width=\"35%\">Name: "  . $row1['author']  . "</td></tr>";
-	echo "<td width=\"65%\">Date:" . $row1['date_posted'] . "</td></tr>";
-	echo "<tr><td>Post:";
-	echo wordwrap($row1['post'] . "</td></tr>",50,"<br />\n",TRUE);
+foreach ($cursor as $obj) {
+    $title = $obj['title'];
+    $post = $obj['post'];
+    $author = $obj['name'];
+    $date = $obj['date'];
+    $pic = "<img src='images/thumbnail.jpg' alt='' class='thumbnail alignleft' />";
+    //$pic = $obj['pic'];
+    $comments = $obj['comments'];
+    echo "<h3><a href=\"#\">" . $title . "</a></h3>";
+    echo $pic;
+    echo "<table>";
+	echo "<tr><td width=\"35%\">Name:"  . $author  . "</td><td></td><tr>";
+	echo "<tr><td width=\"65%\">Date: " . $date . "</td><td></td></tr>";
+	echo "<tr><td>Post:</td></tr><tr><td>";
+	echo wordwrap($post . "</td></tr>",50,"<br />\n",TRUE);
 	echo "</table>";
-	echo"<hr/>";
-    }
+	echo"<br/><hr/>";
+	/*
+	foreach ($cursor as $obj){
+		$post = $comments['post'];
+		$author = $comments['author'];
+		$date = $comments['date_posted'];
+		echo"<table>";
+   	 	echo "<tr><td width=\"35%\">Name: "  . $author  . "</td></tr>";
+		echo "<td width=\"65%\">Date: " . $date . "</td></tr>";
+		echo "<tr><td>Post: ";
+		echo wordwrap($post . "</td></tr>",50,"<br />\n",TRUE);
+		echo "</table>";
+		echo"<hr/>";
 	}
-	?>
+	*/
+}
+?>
 	<div class="clear"></div>  
             <footer class="postmeta">
                 <a href="blog.php?comment=y" class="more-link alignright">Comment</a>
@@ -96,9 +88,7 @@ while($row1 = mysqli_fetch_array($result2)){
             </footer> <!-- end post meta -->
         </article> <!-- end post -->
 	
-<?php
-}
-?>
+
 	
 					<h3>Make a New Blog Entry!</h3>
 					
