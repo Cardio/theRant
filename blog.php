@@ -26,7 +26,9 @@
     
     <div id="main" class="grid_8 alpha">
     <article class="post">		
-					<!-- CONTENT -->
+
+<!-- CONTENT -->
+
 <?php
 $m = new Mongo();
 $mongo = $m->rant;
@@ -34,14 +36,21 @@ $collection = $mongo->posts;
 $cursor = $collection->find();
 
 foreach ($cursor as $obj) {
+    $id = $obj['_id'];
     $title = $obj['title'];
     $post = $obj['post'];
     $author = $obj['name'];
     $date = $obj['date'];
-    $pic = "<img src='images/thumbnail.jpg' alt='' class='thumbnail alignleft' />";
-    //$pic = $obj['pic'];
+    $pic = $obj['pic'];
+
+    if($pic == ""){
+    	$pic = "<img src='images/rant.jpg' alt='' class='thumbnail alignleft' width='200px' height='200px'/>";
+    }
+    else {
+    $pic = "<img src='" . $obj['pic'] . "' alt='' class='thumbnail alignleft' width='200px' height='200px'/>";
+    }
     $comments = $obj['comments'];
-    echo "<h3><a name=\"" . $title . "\" href=\"post.php?name=" . $title . "\">" . $title . "</a></h3>";
+    echo "<h3><a name=\"" . $id . "\" href=\"post.php?name=" . $title . "\">" . $title . "</a></h3>";
     echo $pic;
     echo "<table>";
 	echo "<tr><td width=\"35%\">Name:"  . $author  . "</td><td></td><tr>";
@@ -49,12 +58,14 @@ foreach ($cursor as $obj) {
 	echo "<tr><td>Post:</td></tr><tr><td>";
 	echo wordwrap($post . "</td></tr>",50,"<br />\n",TRUE);
 	echo "</table>";
-	echo"<br/><hr/>";
-	/*
-	foreach ($cursor as $obj){
-		$post = $comments['post'];
-		$author = $comments['author'];
-		$date = $comments['date_posted'];
+	echo"<br /><br /><hr/>";
+	$collectionComments = $mongo->comments;
+	$query = array( "postId" => "$id" );
+	$cursorComments = $collectionComments->find($query);
+	foreach ($cursorComments as $obj){
+		$post = $obj['post'];
+		$author = $obj['name'];
+		$date = $obj['date'];
 		echo"<table>";
    	 	echo "<tr><td width=\"35%\">Name: "  . $author  . "</td></tr>";
 		echo "<td width=\"65%\">Date: " . $date . "</td></tr>";
@@ -63,47 +74,51 @@ foreach ($cursor as $obj) {
 		echo "</table>";
 		echo"<hr/>";
 	}
-	*/
-}
+	echo "<a href='blog.php?comment=" . $id . "' class='more-link alignright'>Comment</a>";
+	echo "<br />";
+	$comment=$_GET['comment'];
+	if($comment == $id){
 ?>
+	<form method="post" action="commentController.php">
+	<table>
+		<tr><td>Date:</td><td><input type="number" name="month" min="1" max="12" step="1" value="<?php echo date("m", time()); ?>" size="3"/>
+			<input type="number" name="day" min="1" max="31" step="1" value="<?php echo date("d", time()); ?>" size="3"/>
+			<input type="number" name="year" min="1900" max="2014" step="1" value="<?php echo date("Y", time()); ?>" size="4"/></td></tr>	
+		<tr><td>Name:</td><td><input type="text" name="name" size="50" value="Insert Your Name Here."/></td></tr>			
+		<tr><td>Post:</td><td><input type="text" name="post" size="50" value="Insert Your Post Here."/></td></tr>
+		<tr><td><input type="hidden" name=postId value="<?php echo $id ?>"><input type="submit" value="Submit" /> </td></tr>
+	</table>
+	</form>
+	<hr/>
+<?php
+	} 
+}//end forEach
+?>
+	
 	<div class="clear"></div>  
             <footer class="postmeta">
-                <a href="blog.php?comment=y" class="more-link alignright">Comment</a>
-				<?php 
-				$comment=$_GET['comment'];
-				if($comment=='y'){
-				?>
-				<form method="post" action="commentController.php">
-				<table>
-				<tr><td>Date:</td><td><input type="number" name="month" min="1" max="12" step="1" value="<?php echo date("m", time()); ?>" size="3"/>
-				<input type="number" name="day" min="1" max="31" step="1" value="<?php echo date("d", time()); ?>" size="3"/>
-				<input type="number" name="year" min="1900" max="2014" step="1" value="<?php echo date("Y", time()); ?>" size="4"/></td></tr>	
-				<tr><td>Name:</td><td><input type="text" name="name" size="50" value="Insert Your Name Here."/></td></tr>			
-				<tr><td>Post:</td><td><input type="text" name="post" size="50" value="Insert Your Post Here."/></td></tr>
-				<td><input type="hidden" name=postId value="<?php echo $postid ?>"><input type="submit" value="Submit" /> </td></tr>
-				</table>
-				</form>
-				<hr/>
-				<?php } ?>
+				
             </footer> <!-- end post meta -->
         </article> <!-- end post -->
 	
 
 	
-					<h3>Make a New Blog Entry!</h3>
+<h3>Make a New Blog Entry!</h3>
 					
-					<form enctype="multipart/form-data" method="post" action="blogController.php">
-					<table>
-					<tr><td>Date:</td><td><input type="number" name="month" min="1" max="12" step="1" value="<?php echo date("m", time()); ?>" size="3"/>
+	<form enctype="multipart/form-data" method="post" action="blogController.php">
+	<table>
+		<tr><td>Date:</td><td><input type="number" name="month" min="1" max="12" step="1" value="<?php echo date("m", time()); ?>" size="3"/>
 					<input type="number" name="day" min="1" max="31" step="1" value="<?php echo date("d", time()); ?>" size="3"/>
 					<input type="number" name="year" min="1900" max="2014" step="1" value="<?php echo date("Y", time()); ?>" size="4"/></td></tr>	
-					<tr><td>Name:</td><td><input type="text" name="name" size="50" value="Insert Your Name Here."/></td></tr>			
-					<tr><td>Title:</td><td><input type="text" name="title" size="50" value="Insert Title Here."/></td></tr>
-					<tr><td>Select a picture to upload: </td><td><input name="image" type="file"/></td></tr>
-					<tr><td>Post:</td><td><input type="text" name="post" size="50" value="Insert Your Post Here."/></td></tr>
-					<td><input type="submit" value="Submit" /> </td></tr>
-					</table>
-					</form>
+		<tr><td>Name:</td><td><input type="text" name="name" size="50" value="Insert Your Name Here."/></td></tr>			
+		<tr><td>Title:</td><td><input type="text" name="title" size="50" value="Insert Title Here."/></td></tr>
+		<tr><td>Enter Picture URL: </td><td><input type="text" name="pic" size="50" value=""/></td></tr>
+		<tr><td>Post:</td><td><input type="text" name="post" size="50" value="Insert Your Post Here."/></td></tr>
+		<td><input type="submit" value="Submit" /> </td></tr>
+	</table>
+	</form>
+					
+					
 					<!-- END CONTENT -->
 					
 					
@@ -111,22 +126,18 @@ foreach ($cursor as $obj) {
     
 <div id="sidebar" class="grid_4 omega">
 		<aside class="widget">
-		<img src="images/rant.jpg" height="200" width="200" />
+		<img src="images/rant.gif" height="200" width="200" />
 		</aside>
 		
         <aside class="widget">
             <h3>Rant Topics</h3>
             
 			<?php
-$m = new Mongo();
-$mongo = $m->rant;
-$collection = $mongo->posts;
-$cursor = $collection->find();
+			$cursor = $collection->find();
 
-foreach ($cursor as $obj) {
-    $title = $obj['title'];
-    echo "<h4><a href=\"#" . $title . "\">" . $title . "</a></h4>";
-}
+			foreach ($cursor as $obj) {
+				echo "<li><a href='#" . $obj['_id'] . "'>" . $obj['title'] . "</a></li>";
+            }
 			?>
             </ul>
         </aside> <!-- end widget -->

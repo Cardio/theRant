@@ -10,10 +10,8 @@ $yr = $_POST['year'];
 $date = $yr . '-' . $month . '-' . $day;
 $title=$_POST['title'];
 $post = $_POST['post'];
+$pic = $_POST['pic'];
 
-$collection->insert(array("title" => $title, "name" => $name, "date" => $date, "post" => $post ));
-
-/*
 //started here
 $id=$row['id'];
 //define a maximum size for the uploaded images in Kb
@@ -29,6 +27,7 @@ function getExtension($str) {
 	return $ext;
 }
 
+/*
 //This variable is used as a flag. The value is initialized with 0 (meaning no error found)  
 //and it will be changed to 1 if an error occurs.  
 //If the error occures the file will not be uploaded.
@@ -64,10 +63,6 @@ function getExtension($str) {
 			$image_name=time().'.'.$extension;
 			//the new name will be containing the full path where will be stored (images folder)
 			$newname="pictures/".$image_name;
-			$queryname="http://localhost/theRant/".$newname;
-			$query="UPDATE posts SET pic='$queryname' WHERE id=$id";
-			$result=mysqli_query($db, $query);
-			mysqli_close($db);
 			//we verify if the image has been uploaded, and print error instead
 			$copied = copy($_FILES['image']['tmp_name'], $newname);
 			if (!$copied){
@@ -82,9 +77,11 @@ if(isset($_POST['Submit'])&&!$errors) {
 	//echo "File Uploaded Successfully!";
 	header('Location: blog.php?msg=picUploaded');
 	exit;
-}  
-?>
-*/   
+}
+*/
+
+$collection->insert(array("title" => $title, "name" => $name, "date" => $date, "post" => $post, "pic" => $pic ));
+   
 header('Location: blog.php');
 exit;   
 ?>
