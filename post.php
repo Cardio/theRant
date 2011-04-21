@@ -77,7 +77,7 @@ foreach ($cursor as $obj) {
 		echo "</table>";
 		echo"<hr/>";
 	}
-	echo "<a href='blog.php?comment=" . $id . "' class='more-link alignright'>Comment</a>";
+	echo "<a href='post.php?name=" . $title . "&comment=" . $id . "' class='more-link alignright'>Comment</a>";
 	echo "<br />";
 	$comment=$_GET['comment'];
 	if($comment == $id){
