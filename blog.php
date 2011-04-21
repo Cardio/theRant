@@ -34,7 +34,7 @@ $m = new Mongo();
 $mongo = $m->rant;
 $collection = $mongo->posts;
 $sort = array( '$natural' => -1 );
-$cursor = $collection->find()->sort($sort);
+$cursor = $collection->find()->sort($sort)->limit(25);
 
 foreach ($cursor as $obj) {
     $id = $obj['_id'];
