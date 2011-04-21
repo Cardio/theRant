@@ -33,7 +33,8 @@
 $m = new Mongo();
 $mongo = $m->rant;
 $collection = $mongo->posts;
-$cursor = $collection->find();
+$sort = array( '$natural' => -1 );
+$cursor = $collection->find()->sort($sort);
 
 foreach ($cursor as $obj) {
     $id = $obj['_id'];
@@ -53,12 +54,12 @@ foreach ($cursor as $obj) {
     echo "<h3><a name=\"" . $id . "\" href=\"post.php?name=" . $title . "\">" . $title . "</a></h3>";
     echo $pic;
     echo "<table>";
-	echo "<tr><td width=\"35%\">Name:"  . $author  . "</td><td></td><tr>";
+	echo "<tr><td width=\"35%\">Name: "  . $author  . "</td><td></td><tr>";
 	echo "<tr><td width=\"65%\">Date: " . $date . "</td><td></td></tr>";
-	echo "<tr><td>Post:</td></tr><tr><td>";
+	echo "<tr><td>&nbsp</td></tr><tr><td>";
 	echo wordwrap($post . "</td></tr>",50,"<br />\n",TRUE);
 	echo "</table>";
-	echo"<br /><br /><hr/>";
+	echo"<br /><hr/>";
 	$collectionComments = $mongo->comments;
 	$query = array( "postId" => "$id" );
 	$cursorComments = $collectionComments->find($query);
@@ -92,6 +93,7 @@ foreach ($cursor as $obj) {
 	<hr/>
 <?php
 	} 
+	echo "<br />";
 }//end forEach
 ?>
 	
@@ -130,10 +132,10 @@ foreach ($cursor as $obj) {
 		</aside>
 		
         <aside class="widget">
-            <h3>Rant Topics</h3>
+            <h3>Recent Rants</h3>
             
 			<?php
-			$cursor = $collection->find();
+			$cursor = $collection->find()->sort($sort);
 
 			foreach ($cursor as $obj) {
 				echo "<li><a href='#" . $obj['_id'] . "'>" . $obj['title'] . "</a></li>";

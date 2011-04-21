@@ -17,7 +17,6 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	outline: 0;
-	font-size: 100%;
 	vertical-align: baseline;
 	background: transparent;
 }
@@ -33,7 +32,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; }
 body { 
 	/*background: #eee url(images/bg.png) repeat; */
 	background:#000000;
-	color: #000000;
+	color: white;
 	font: 14px/24px Georgia, 'Times New Roman', Times, serif;
 }
 
@@ -282,7 +281,7 @@ blockquote p { margin: 0; }
 .widget li { line-height: 30px; }
 
 .widget li a { 
-	color: #333;
+	color: white;
 	padding: 4px 5px; 
 	-webkit-transition: margin-left 0.3s linear;
 	-moz-transition: margin-left 0.3s linear;
@@ -290,7 +289,7 @@ blockquote p { margin: 0; }
 }
 
 .widget li a:hover {
-	color: #fff;
+	color: #333;
 	margin-left: 10px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -429,19 +428,18 @@ input[type=submit]:hover {
 
 img.alignleft, 
 img.alignright { 
-	background: #f2f2f2;
-	border: 2px solid #cecdcd;
+
 	padding: 5px;
 	-webkit-transition: border 0.2s linear;
 	-moz-transition: border 0.2s linear;
 	transition: border 0.2s linear;
 }
 
-img.alignleft { margin-right: 15px; }
+img.alignleft { margin-right: 15px; padding-bottom: 10px;}
 img.alignright { margin-left: 15px; }
 
-.thumbnail { margin-left: -50px; }
-.thumbnail:hover { border: 2px solid #000; }
+.thumbnail { margin-left: 0px; }
+.thumbnail:hover {  }
 
 .hide { display: none; }
 
