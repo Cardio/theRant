@@ -35,13 +35,14 @@ $cursor = $collection->find();
 
 foreach ($cursor as $obj) {
     $title = $obj['title'];
+    if ($title == $_GET['name']) {
     $post = $obj['post'];
     $author = $obj['name'];
     $date = $obj['date'];
     $pic = "<img src='images/thumbnail.jpg' alt='' class='thumbnail alignleft' />";
     //$pic = $obj['pic'];
     $comments = $obj['comments'];
-    echo "<h3><a name=\"" . $title . "\" href=\"post.php?name=" . $title . "\">" . $title . "</a></h3>";
+    echo "<h3><a href=\"#\"><a name=\"" . $title . "\">" . $title . "</a></a></h3>";
     echo $pic;
     echo "<table>";
 	echo "<tr><td width=\"35%\">Name:"  . $author  . "</td><td></td><tr>";
@@ -64,11 +65,12 @@ foreach ($cursor as $obj) {
 		echo"<hr/>";
 	}
 	*/
+    }
 }
 ?>
 	<div class="clear"></div>  
             <footer class="postmeta">
-                <a href="blog.php?comment=y" class="more-link alignright">Comment</a>
+                <a href="post.php?comment=y&name=<?= $_GET['name'] ?>" class="more-link alignright">Comment</a>
 				<?php 
 				$comment=$_GET['comment'];
 				if($comment=='y'){
@@ -87,23 +89,7 @@ foreach ($cursor as $obj) {
 				<?php } ?>
             </footer> <!-- end post meta -->
         </article> <!-- end post -->
-	
 
-	
-					<h3>Make a New Blog Entry!</h3>
-					
-					<form enctype="multipart/form-data" method="post" action="blogController.php">
-					<table>
-					<tr><td>Date:</td><td><input type="number" name="month" min="1" max="12" step="1" value="<?php echo date("m", time()); ?>" size="3"/>
-					<input type="number" name="day" min="1" max="31" step="1" value="<?php echo date("d", time()); ?>" size="3"/>
-					<input type="number" name="year" min="1900" max="2014" step="1" value="<?php echo date("Y", time()); ?>" size="4"/></td></tr>	
-					<tr><td>Name:</td><td><input type="text" name="name" size="50" value="Insert Your Name Here."/></td></tr>			
-					<tr><td>Title:</td><td><input type="text" name="title" size="50" value="Insert Title Here."/></td></tr>
-					<tr><td>Select a picture to upload: </td><td><input name="image" type="file"/></td></tr>
-					<tr><td>Post:</td><td><input type="text" name="post" size="50" value="Insert Your Post Here."/></td></tr>
-					<td><input type="submit" value="Submit" /> </td></tr>
-					</table>
-					</form>
 					<!-- END CONTENT -->
 					
 					
