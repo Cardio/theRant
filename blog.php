@@ -41,7 +41,7 @@ foreach ($cursor as $obj) {
     $pic = "<img src='images/thumbnail.jpg' alt='' class='thumbnail alignleft' />";
     //$pic = $obj['pic'];
     $comments = $obj['comments'];
-    echo "<h3><a href=\"#" . $title . "\">" . $title . "</a></h3>";
+    echo "<h3><a href=\"#\"><a name=\"" . $title . "\">" . $title . "</a></a></h3>";
     echo $pic;
     echo "<table>";
 	echo "<tr><td width=\"35%\">Name:"  . $author  . "</td><td></td><tr>";
@@ -118,12 +118,15 @@ foreach ($cursor as $obj) {
             <h3>Rant Topics</h3>
             
 			<?php
-			$query = "SELECT * FROM posts";  
-			$result = mysqli_query($db, $query)or die("Error Querying Database1");
-			while($row = mysqli_fetch_array($result)){
-				echo "<li><a name=\"" . $row['title'] . "\">" . $row['title'] . "</a></li>";
-            }
-			mysqli_close($db);
+$m = new Mongo();
+$mongo = $m->rant;
+$collection = $mongo->posts;
+$cursor = $collection->find();
+
+foreach ($cursor as $obj) {
+    $title = $obj['title'];
+    echo "<h4><a href=\"#" . $title . "\">" . $title . "</a></h4>";
+}
 			?>
             </ul>
         </aside> <!-- end widget -->
