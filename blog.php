@@ -41,7 +41,7 @@ foreach ($cursor as $obj) {
     $pic = "<img src='images/thumbnail.jpg' alt='' class='thumbnail alignleft' />";
     //$pic = $obj['pic'];
     $comments = $obj['comments'];
-    echo "<h3><a href=\"#\">" . $title . "</a></h3>";
+    echo "<h3><a href=\"#" . $title . "\">" . $title . "</a></h3>";
     echo $pic;
     echo "<table>";
 	echo "<tr><td width=\"35%\">Name:"  . $author  . "</td><td></td><tr>";
@@ -121,7 +121,7 @@ foreach ($cursor as $obj) {
 			$query = "SELECT * FROM posts";  
 			$result = mysqli_query($db, $query)or die("Error Querying Database1");
 			while($row = mysqli_fetch_array($result)){
-				echo "<li><a href=\"#\">" . $row['title'] . "</a></li>";
+				echo "<li><a name=\"" . $row['title'] . "\">" . $row['title'] . "</a></li>";
             }
 			mysqli_close($db);
 			?>
